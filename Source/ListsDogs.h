@@ -4,9 +4,9 @@
 #include <cstdlib>
 
 struct Date{
-    int year;
-    int month;
-    int day;
+    int year = 0;
+    int month = 0;
+    int day = 0;
 };
 
 struct Dog{
@@ -192,7 +192,7 @@ int Save_In_File(char* file_name, Nod* list_head, int profit, Date*& current_dat
     
     if(!FILE) return 0;
     
-    FILE << current_date->year << ".0" << current_date->month << ".0" << current_date->day;
+    FILE << current_date->year << "-0" << current_date->month << "-0" << current_date->day;
     FILE << '\n';
     FILE << profit;
     FILE << '\n';

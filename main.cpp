@@ -82,7 +82,7 @@ void menu(){
     system("cls");
 
     std::cout << "---|KennelManagemant-Tool|---" 
-        << curent_date->year << '.' << curent_date->month << '.' << curent_date->day 
+        << curent_date->year << '-' << curent_date->month << '-' << curent_date->day 
         << "---" << file << "---" << '\n';
     std::cout << '\n';
     std::cout << "1...Show Dogs" << '\n';
