@@ -24,7 +24,7 @@ struct Nod{
     Nod* next;
 };
 
-void Read_Dog_Info(Dog* dog){
+void Show_Dog_Info(Dog* dog){
     std::cout << dog->id << ' '
               << dog->name << ' ' 
               << dog->race << ' '
@@ -34,7 +34,7 @@ void Read_Dog_Info(Dog* dog){
     std::cout << std::endl;
 }
 
-Date* Get_Date_String(char* date_string){
+Date* StringToDate(char* date_string){
     Date* date = new Date;
     char number_string[20];
     int length = 0;
@@ -57,61 +57,60 @@ Date* Get_Date_String(char* date_string){
     return date;
 }
 
-Dog* Find_Dog(int dog_id, Nod* list_head){
+Dog* GetDog_By_ID(int dog_id, Nod* list_head){
     for (; list_head->next != NULL; list_head = list_head->next){ 
         if(list_head->dog->id == dog_id) 
             break;
     }
-
-    if(!dog_id){
-        return list_head->dog;
-    }
     
-    if(list_head->dog->id != dog_id) {
-        std::cout << "Dog does not exist" << std::endl; 
-        return NULL;
-    }
-    else return list_head->dog;
+    if(list_head->dog->id == dog_id) return list_head->dog;
+        
+    return NULL;
 }
 
-int Dog_Exists(int dog_id, Nod* list_head){
+int GetLast_ID(Nod* list_head){
+    if(list_head == NULL) return 0;
+    for(; list_head->next != NULL; list_head = list_head->next);
+
+    return list_head->dog->id; 
+}
+
+bool Dog_Exist(int dog_id, Nod* list_head){
     if(list_head->dog->id == dog_id) 
-        return 1;
+        return true;
 
     for (; list_head != NULL; list_head = list_head->next)
         if(list_head->dog->id == dog_id) 
-            return 1;
+            return true;
     
-    return 0;
+    return false;
 }
 
-int Read(Nod* list_head){
-    Nod* head = list_head;
+int Show_List(Nod* list_head){
+    if(list_head == NULL) return 0;
 
-    if(head != NULL){
-        while (head != NULL){
-            Read_Dog_Info(head->dog);
-            head = head->next;
-        }
-
-        return 1;
+    while (list_head != NULL){
+        Show_Dog_Info(list_head->dog);
+        list_head = list_head->next;
     }
 
-    return 0;
+    return 1;
 }
-void Create(Dog* dog, Nod*& list_head){
-    list_head = new Nod({dog, NULL});
-}
-void Add(Dog* dog, Nod*& list_head){
+
+void Add_List(Dog* dog, Nod*& list_head){
     Nod* new_dog = new Nod({dog, NULL});
     Nod* head = list_head;
-    if(list_head == NULL) list_head = new_dog;
+
+    if(list_head == NULL) { list_head = new_dog; return;}
     for(; head->next != NULL; head = head->next);
+    
     head->next = new_dog;
 }
-void Delete(int dog_id, Nod*& list_head){
-    if(!dog_id || list_head->dog->id == dog_id) {
-        Nod* target = list_head;
+
+void DeleteDog_By_ID(int dog_id, Nod*& list_head){
+    Nod* target;
+    if(dog_id == 0|| list_head->dog->id == dog_id) {
+        target = list_head;
         list_head = list_head->next;
         delete target;
 
@@ -122,64 +121,59 @@ void Delete(int dog_id, Nod*& list_head){
     Nod* back;
 
     for (; head->next != NULL; head = head->next){ 
-        if(head->dog->id == dog_id) 
-            break;
+        if(head->dog->id == dog_id) break;
         back = head;
     }
 
     if(head == NULL) return;
     
-    Nod* target = head;
+    target = head;
     back->next = head->next;
     delete target;
 }
 
-int File_Exists(char* file_name){
+bool File_Exists(char* file_name){
     std::ifstream FILE (file_name);
-    if(!FILE) return 0;
+    if(!FILE) return false;
     FILE.close();
 
-    return 1;
+    return true;
 }
+
 int Load_From_File(char* file_name, Nod*& list_head, int& profit, Date*& current_date){
     std::ifstream FILE (file_name);
     if(!FILE) return 0;
     
-    bool list_created = false;
-    char line[55];
+    char line_buffer[55];
 
-    FILE.getline(line, 50);
-    current_date = Get_Date_String(line);
+    FILE >> line_buffer;
+    current_date = StringToDate(line_buffer);
 
-    FILE.getline(line, 50);
-    profit = atoi(line);
+    FILE >> line_buffer;
+    profit = atoi(line_buffer);
 
     while (FILE){
-        FILE.getline(line, 50);
+        FILE.getline(line_buffer, 50);
 
-        if(line[0] == '{'){
+        if(line_buffer[0] == '{'){
             Dog* dog = new Dog;
 
             int i = 0;
-            while (line[0] != '}'){
-                FILE.getline(line, 50);
+            while (line_buffer[0] != '}'){
+                FILE.getline(line_buffer, 50);
                 
-                if(i == 0) dog->id = atoi(line);
-                if(i == 1) strncpy(dog->name, line, 50);
-                if(i == 2) strncpy(dog->race, line, 35);
-                if(i == 3) strncpy(dog->birth, line, 20);
-                if(i == 4) dog->price = atoi(line);
-                if(i == 5) dog->cage = atoi(line);
+                if(i == 0) dog->id = atoi(line_buffer);
+                if(i == 1) strncpy(dog->name, line_buffer, 50);
+                if(i == 2) strncpy(dog->race, line_buffer, 35);
+                if(i == 3) strncpy(dog->birth, line_buffer, 20);
+                if(i == 4) dog->price = atoi(line_buffer);
+                if(i == 5) dog->cage = atoi(line_buffer);
                 i++;
             }
             
-            dog->birth_date = Get_Date_String(dog->birth);
+            dog->birth_date = StringToDate(dog->birth);
 
-            if(!list_created){
-                Create(dog, list_head); 
-                list_created = true;
-            }
-            else Add(dog, list_head);
+            Add_List(dog, list_head);
         }
     }
 
@@ -187,6 +181,7 @@ int Load_From_File(char* file_name, Nod*& list_head, int& profit, Date*& current
 
     return 1;
 }
+
 int Save_In_File(char* file_name, Nod* list_head, int profit, Date*& current_date){
     std::ofstream FILE (file_name);
     
@@ -210,7 +205,6 @@ int Save_In_File(char* file_name, Nod* list_head, int profit, Date*& current_dat
 
         list_head = list_head->next;
     }
-
 
     FILE.close();
 
