@@ -9,7 +9,7 @@
 #define CMDred system("color 4");
 #define CMDwhite system("color 7");
 
-char file[100] = "Data\\";
+char file[100] = " ";
 Date* curent_date = NULL;
 bool running = true;
 bool save = false;
@@ -411,7 +411,10 @@ int main(){
             std::cin >> option;
         while (option <= 0 && option >= 1);
 
-        if(option == 1) option11(list_head, file);
+        if(option == 1) {
+            option11(list_head, file);
+            if(file[0] == ' ') running = false;
+        };
         if(option == 0) running = false;
     }
 
