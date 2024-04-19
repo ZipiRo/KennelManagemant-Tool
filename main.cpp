@@ -9,8 +9,8 @@
 #define CMDred system("color 4");
 #define CMDwhite system("color 7");
 
-char file[100] = "Data\\dogs.data";
-Date* curent_date;
+char file[100] = "Data\\dogs_short.data";
+Date* curent_date = NULL;
 bool running = true;
 bool save = false;
 int profit = 0;
@@ -86,7 +86,7 @@ void menu(){
     clearCMD
 
     std::cout << "---|KennelManagemant-Tool|---" 
-        << curent_date->year << '-' << curent_date->month << '-' << curent_date->day 
+        << curent_date->year << '.' << curent_date->month << '.' << curent_date->day 
         << "---" << file << "---" << '\n';
     std::cout << '\n';
     std::cout << "1...Show List Of Dogs" << '\n';
@@ -400,8 +400,8 @@ int main(){
         CMDblue
         running = false;
         std::cout << "------------------NO FILE-------------------" << '\n';
-        std::cout << "...Change file path in code and recompile..." << '\n';
-        std::cout << "........The file should not be empty........" << '\n';
+        std::cout << "---Change file path in code and recompile---" << '\n';
+        std::cout << "--------------------------------------------" << '\n';
 
         getch();
     }
@@ -432,5 +432,6 @@ int main(){
     
     if(save)
         if(!Save_In_File(file, list_head, profit, curent_date));
+        
     return 0;
 }

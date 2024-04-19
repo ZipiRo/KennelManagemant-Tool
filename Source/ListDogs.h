@@ -4,9 +4,9 @@
 #include <cstdlib>
 
 struct Date{
-    int year = 0;
-    int month = 0;
-    int day = 0;
+    int year;
+    int month;
+    int day;
 };
 
 struct Dog{
@@ -36,24 +36,23 @@ void Show_Dog_Info(Dog* dog){
 
 Date* StringToDate(char* date_string){
     Date* date = new Date;
-    char number_string[20];
+    char string[4][20];
     int length = 0;
 
+    int j = 0;
     for(int i = 0; date_string[i]; i++){
-        if(strchr("./-",date_string[i]));
-        else number_string[length++] = date_string[i];
+        if(strchr(" ./-", date_string[i])){ 
+            string[j][length] = '\0'; 
+            length = 0;
+            j++; 
+        }
+        else string[j][length++] = date_string[i];
     }
-    number_string[length] = '\0';
-
-    int number_date; 
-    number_date = atoi(number_string);
-
-    date->day = number_date % 100;
-    number_date /= 100;
-    date->month = number_date % 100;
-    number_date /= 100;
-    date->year = number_date;
     
+    date->year = atoi(string[0]);
+    date->month = atoi(string[1]);
+    date->day = atoi(string[2]);
+
     return date;
 }
 
@@ -186,8 +185,8 @@ int Save_In_File(char* file_name, Nod* list_head, int profit, Date*& current_dat
     std::ofstream FILE (file_name);
     
     if(!FILE) return 0;
-    
-    FILE << current_date->year << "-0" << current_date->month << "-0" << current_date->day;
+
+    FILE << current_date->year << "." << current_date->month << "." << current_date->day;
     FILE << '\n';
     FILE << profit;
     FILE << '\n';
