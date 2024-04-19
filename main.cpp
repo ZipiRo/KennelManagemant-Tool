@@ -9,7 +9,7 @@
 #define CMDred system("color 4");
 #define CMDwhite system("color 7");
 
-char file[100] = "Data\\dogs_short.data";
+char file[100] = "Data\\";
 Date* curent_date = NULL;
 bool running = true;
 bool save = false;
@@ -397,14 +397,22 @@ void option12(){
 
 int main(){
     Nod* list_head = NULL;
+
     if(!Load_From_File(file, list_head, profit, curent_date)){
         CMDblue
-        running = false;
-        std::cout << "------------------NO FILE-------------------" << '\n';
-        std::cout << "---Change file path in code and recompile---" << '\n';
-        std::cout << "--------------------------------------------" << '\n';
+        std::cout << "No Load File" << '\n';
+        std::cout << '\n';
+        std::cout << "1...Load a File (*.data)" << '\n';
+        std::cout << "0...Quit" << '\n';
+        std::cout << "\n-> ";
 
-        getch();
+        int option = 0; 
+        do
+            std::cin >> option;
+        while (option <= 0 && option >= 1);
+
+        if(option == 1) option11(list_head, file);
+        if(option == 0) running = false;
     }
 
     while (running){
