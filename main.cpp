@@ -199,15 +199,16 @@ void option7(Nod*& list_head){
     clearCMD
 
     Dog* dog = new Dog;
-
+    
+    std::cin.get();
     std::cout << "Dog Name: " << '\n';
-    std::cin >> dog->name;
+    std::cin.getline(dog->name, 50);
     clearCMD
     std::cout << "Dog Race: " << '\n';
-    std::cin >> dog->race;
+    std::cin.getline(dog->race, 35);
     clearCMD
     std::cout << "Dog Birth: " << '\n';
-    std::cin >> dog->birth;
+    std::cin.getline(dog->birth, 20);
     clearCMD
     std::cout << "Dog Price: " << '\n';
     std::cin >> dog->price;
